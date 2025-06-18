@@ -1,24 +1,17 @@
 
-import React, { useState } from 'react';
-import { Shield, Users, Calendar, CreditCard, Bell } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RoleVerification from '../admin/RoleVerification';
-import HospitalManagement from '../admin/HospitalManagement';
-import AppointmentManagement from '../admin/AppointmentManagement';
-import PaymentTracking from '../admin/PaymentTracking';
-import NotificationConsole from '../admin/NotificationConsole';
+import React from 'react';
+import { Shield, FileText, Award } from 'lucide-react';
+import RoleRequestsTile from '../admin/tiles/RoleRequestsTile';
+import MintManageAppointmentsTile from '../admin/tiles/MintManageAppointmentsTile';
+import NFTHistoryTile from '../admin/tiles/NFTHistoryTile';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('roles');
-
   // TODO: Fetch admin statistics from Supabase
   const adminStats = {
-    pendingVerifications: 12,
-    totalDoctors: 145,
-    totalHospitals: 23,
-    pendingPayments: 8,
-    totalTransactions: 1247
+    pendingRoleRequests: 5,
+    totalAppointments: 24,
+    mintedNFTs: 18,
+    completedAppointments: 15
   };
 
   return (
@@ -29,69 +22,34 @@ const AdminDashboard = () => {
           <p className="text-gray-600">System management and oversight</p>
         </div>
         <div className="flex items-center space-x-4">
-          <Card className="bg-red-50">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Shield className="h-5 w-5 text-red-600" />
-                <span className="text-sm font-medium">{adminStats.pendingVerifications} Pending</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-blue-50">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Users className="h-5 w-5 text-blue-600" />
-                <span className="text-sm font-medium">{adminStats.totalDoctors} Doctors</span>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-lg">
+            <Shield className="h-5 w-5 text-red-600" />
+            <span className="text-sm font-medium">{adminStats.pendingRoleRequests} Role Requests</span>
+          </div>
+          <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+            <FileText className="h-5 w-5 text-blue-600" />
+            <span className="text-sm font-medium">{adminStats.totalAppointments} Appointments</span>
+          </div>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="roles" className="flex items-center space-x-2">
-            <Shield className="h-4 w-4" />
-            <span>Role Verification</span>
-          </TabsTrigger>
-          <TabsTrigger value="hospitals" className="flex items-center space-x-2">
-            <Users className="h-4 w-4" />
-            <span>Hospital Management</span>
-          </TabsTrigger>
-          <TabsTrigger value="appointments" className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4" />
-            <span>Appointments</span>
-          </TabsTrigger>
-          <TabsTrigger value="payments" className="flex items-center space-x-2">
-            <CreditCard className="h-4 w-4" />
-            <span>Payments</span>
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center space-x-2">
-            <Bell className="h-4 w-4" />
-            <span>Notifications</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="roles">
-          <RoleVerification />
-        </TabsContent>
-
-        <TabsContent value="hospitals">
-          <HospitalManagement />
-        </TabsContent>
-
-        <TabsContent value="appointments">
-          <AppointmentManagement />
-        </TabsContent>
-
-        <TabsContent value="payments">
-          <PaymentTracking />
-        </TabsContent>
-
-        <TabsContent value="notifications">
-          <NotificationConsole />
-        </TabsContent>
-      </Tabs>
+      {/* Bento Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Role Requests Tile */}
+        <div>
+          <RoleRequestsTile />
+        </div>
+        
+        {/* Mint & Manage Appointments Tile - Spans 2 columns */}
+        <div className="md:col-span-2 lg:col-span-2">
+          <MintManageAppointmentsTile />
+        </div>
+        
+        {/* NFT History Tile - Spans full width on mobile, 1 column on larger screens */}
+        <div className="md:col-span-2 lg:col-span-1">
+          <NFTHistoryTile />
+        </div>
+      </div>
     </div>
   );
 };
